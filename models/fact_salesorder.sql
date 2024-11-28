@@ -1,4 +1,4 @@
--- fact_sales
+-- fact_salesorder
 {{
   config(
     materialized='table'
@@ -19,6 +19,17 @@ SELECT
   {{ dbt_utils.generate_surrogate_key([
 				'`promotion-ids`'
 			]) }} as promotion_id,
+  {{ dbt_utils.generate_surrogate_key([
+				'`ship-service-level`',
+        '`ship-city`',
+        '`ship-state`',
+        '`ship-postal-code`',
+        '`ship-country`'
+			]) }} as sales_shipment_id,
+  {{ dbt_utils.generate_surrogate_key([
+				'`Sales Channel `'
+			]) }} as sales_channel_id,
+
   SUM(qty) AS qty,
   COALESCE(SUM(amount),0) AS amount,
 FROM
